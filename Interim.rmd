@@ -4,9 +4,57 @@ output: html_notebook
 ---
 
 Members: Daryna Horetska, Yaryna Pechenenko, Andrii Hovorov
+Our dataset:
+Multi-Resistance Antibiotic Susceptibility
+https://www.kaggle.com/datasets/adilimadeddinehosni/multi-resistance-antibiotic-susceptibility
+Our goal: to analyse bacteria resistance to different antibiotic depending on age, previous diseases, gender and etc.
 
+Cleaning data:
+
+```{r}
+library(tidyr)
+
+dataset_readed <- read.csv("Bacteria_dataset_Multiresictance.csv")
+
+dataset_readed[dataset_readed == "?"] <- NA
+dataset_readed[dataset_readed == "missing"] <- NA
+dataset_readed[dataset_readed == "unknown"] <- NA
+dataset_readed[dataset_readed == "error"] <- NA
+dataset_readed[dataset_readed == "???"] <- NA
+dataset_readed[dataset_readed == "??"] <- NA
+dataset_readed[dataset_readed == ""] <- NA
+dataset_readed[dataset_readed == "None"] <- NA
+
+
+dataset_readed <- dataset_readed %>%
+  separate(`age.gender`, into = c("age", "gender"), sep = "/", remove = FALSE)
+```
 
 
 ```{r}
-plot(cars)
+dataset_readed$age <- as.numeric(dataset_readed$age)
+
+cat("Descriptive analysis of ages\n")
+summary(dataset_readed$age)
+cat("Infection frequency")
+table(dataset_readed$Infection_Freq, useNA = "ifany")
+
 ```
+Hypothesis:
+
+1. Association between bacteria type and resistance
+H0 -  There is no association between the bacterial species  and resistance to a specific antibiotic
+H1 - There is an association between the bacterial species and resistance to the specific antibiotic
+
+2. Impact of risk factors on resistance
+H0 - There is no association between having the risk factor and being infected with a resistant strain. The probability of resistance is the same for patients with and without the risk factor
+H1 - There is an association between having the risk factor and being infected with a resistant strain. The probability of resistance is different for patients with and without the risk factor
+
+3. Effect of patient age on resistance
+H0 - The mean age of patients with a resistant infection is equal to the mean age of patients with a susceptible infection
+H1 - The mean age of patients with a resistant infection is not equal to the mean age of patients with a susceptible infection
+
+4. Co-resistance between antibiotics
+H0 - Resistance to one antibiotic is independent of resistance to the other
+H1 - Resistance to one antibiotic is dependent of resistance to the other
+
