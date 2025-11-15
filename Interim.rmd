@@ -1,0 +1,12 @@
+---
+title: "Interim project"
+output: html_notebook
+---
+
+Members: Daryna Horetska, Yaryna Pechenenko, Andrii Hovorov
+
+
+
+```{r}
+plot(cars)
+```
