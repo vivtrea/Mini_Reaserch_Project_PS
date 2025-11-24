@@ -50,7 +50,7 @@ H1 - There is an association between the bacterial species and resistance to the
 H0 - There is no association between having the risk factor and being infected with a resistant strain. The probability of resistance is the same for patients with and without the risk factor
 H1 - There is an association between having the risk factor and being infected with a resistant strain. The probability of resistance is different for patients with and without the risk factor
 
-3. Effect of patient age on resistance
+3. Effect of patient age on resistanceіі
 H0 - The mean age of patients with a resistant infection is equal to the mean age of patients with a susceptible infection
 H1 - The mean age of patients with a resistant infection is not equal to the mean age of patients with a susceptible infection
 
