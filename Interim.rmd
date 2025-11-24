@@ -13,6 +13,9 @@ Cleaning data:
 
 ```{r}
 library(tidyr)
+library(dplyr)
+library(stringr)
+
 
 dataset_readed <- read.csv("Bacteria_dataset_Multiresictance.csv")
 
@@ -24,6 +27,39 @@ dataset_readed[dataset_readed == "???"] <- NA
 dataset_readed[dataset_readed == "??"] <- NA
 dataset_readed[dataset_readed == ""] <- NA
 dataset_readed[dataset_readed == "None"] <- NA
+dataset_readed[dataset_readed == "null"] <- NA
+dataset_readed <- dataset_readed %>% 
+  separate(Souches, into = c("Strain_ID", "souche_description"), sep = " ", extra = "merge", fill = "right")
+dataset_readed$souche_description <- tolower(dataset_readed$souche_description)
+dataset_readed$souche_description <- trimws(dataset_readed$souche_description)
+
+# Escherichia coli
+dataset_readed$souche_description[dataset_readed$souche_description == "e coli"] <- "escherichia coli"
+dataset_readed$souche_description[dataset_readed$souche_description == "e.coi"] <- "escherichia coli"
+dataset_readed$souche_description[dataset_readed$souche_description == "e.cli"] <- "escherichia coli"
+dataset_readed$souche_description[dataset_readed$souche_description == "e. coli"] <- "escherichia coli"
+```
+
+
+```{r}
+# Enterobacteria spp.
+dataset_readed$souche_description[dataset_readed$souche_description == "spp. enteobacteria spp."] <- "enterobacteria spp."
+dataset_readed$souche_description[dataset_readed$souche_description == "enter.bacteria"] <- "enterobacteria spp."
+dataset_readed$souche_description[dataset_readed$souche_description == "enteobacteria spp."] <- "enterobacteria spp."
+dataset_readed$souche_description[dataset_readed$souche_description == "enter.bacteria spp."] <- "enterobacteria spp."
+
+# Klebsiella pneumoniae
+dataset_readed$souche_description[dataset_readed$souche_description == "klbsiella pneumoniae"] <- "klebsiella pneumoniae"
+dataset_readed$souche_description[dataset_readed$souche_description == "klebsie.lla pneumoniae"] <- "klebsiella pneumoniae"
+
+# Proteus mirabilis
+dataset_readed$souche_description[dataset_readed$souche_description == "protus mirabilis"] <- "proteus mirabilis"
+dataset_readed$souche_description[dataset_readed$souche_description == "prot.eus mirabilis"] <- "proteus mirabilis"
+dataset_readed$souche_description[dataset_readed$souche_description == "proeus mirabilis"] <- "proteus mirabilis"
+
+
+dataset_readed <- na.omit(dataset_readed)
+
 
 
 dataset_readed <- dataset_readed %>%
@@ -40,21 +76,56 @@ cat("Infection frequency")
 table(dataset_readed$Infection_Freq, useNA = "ifany")
 
 ```
+```{r}
+# n_distinct(dataset_readed$Souches)
+```
+
+
+```{r}
+# dataset_readed %>% 
+#   group_by(Souches) %>% 
+#   filter(n() > 1)
+```
+
+
+```{r}
+n_distinct(dataset_readed$souche_description)
+```
+
+
+```{r}
+dataset_readed %>%
+  count(souche_description, sort = TRUE) %>%
+  ggplot(aes(x = reorder(souche_description, n), y = n)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Frequency of Bacteria Species",
+    x = "Bacteria (Species)",
+    y = "Count"
+  ) +
+  theme_minimal()
+```
+
 Hypothesis:
 
-1. Association between bacteria type and resistance
-H0 -  There is no association between the bacterial species  and resistance to a specific antibiotic
-H1 - There is an association between the bacterial species and resistance to the specific antibiotic
+1.
+H0: The mean age of patients with a resistant infection is equal to the mean age of patients with a susceptible infection.\\
+H1: The mean age of patients with resistant infection is not equal to those with a susceptible infection.'
 
-2. Impact of risk factors on resistance
-H0 - There is no association between having the risk factor and being infected with a resistant strain. The probability of resistance is the same for patients with and without the risk factor
-H1 - There is an association between having the risk factor and being infected with a resistant strain. The probability of resistance is different for patients with and without the risk factor
 
-3. Effect of patient age on resistanceіі
-H0 - The mean age of patients with a resistant infection is equal to the mean age of patients with a susceptible infection
-H1 - The mean age of patients with a resistant infection is not equal to the mean age of patients with a susceptible infection
+t-test because we don't know the theoretical variance (so we will compare mu_x(average age for resistant cases) and mu_y (average age for susceptible cases))
 
-4. Co-resistance between antibiotics
-H0 - Resistance to one antibiotic is independent of resistance to the other
-H1 - Resistance to one antibiotic is dependent of resistance to the other
+2.
+
+H0: diabetes has no impact on resistance to antibiotic
+H1: diabetes has impact on resistance to antibiotic
+
+
+3. Continue to the previous
+H0: the effect of diabetes on resistance does not depend on the type of bacteria
+H1: the effect of diabetes on resistance does depend on the type of bacteria
+
+
+
 
