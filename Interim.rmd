@@ -127,14 +127,22 @@ hist(dataset_readed$age,breaks = seq(min(dataset_readed$age,na.rm = TRUE), max(d
      main = "Distribution of Patient Ages",  # title
      xlab = "Age",         # x-axis label
      ylab = "Number of Patients")
-lines(ecdf(dataset_readed$age), col = "red", lwd = 2)
 ```
+
+```{r}
+install.packages("nortest")
+library(nortest)
+ad.test(dataset_readed$age)
+```
+
 
 ```{r}
 ks.test(dataset_readed$age, "pnorm", mean = mean(dataset_readed$age), sd=sd(dataset_readed$age))
 ```
 
 ```{r}
+shapiro.test(dataset_readed$age[dataset_readed$AMC == "R"])
+shapiro.test(dataset_readed$age[dataset_readed$AMC == "S"])
 
 ```
 
