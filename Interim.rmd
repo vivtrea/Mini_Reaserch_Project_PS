@@ -15,6 +15,7 @@ Cleaning data:
 library(tidyr)
 library(dplyr)
 library(stringr)
+library(ggplot2)
 
 
 dataset_readed <- read.csv("Bacteria_dataset_Multiresictance.csv")
@@ -38,6 +39,17 @@ dataset_readed$souche_description[dataset_readed$souche_description == "e coli"]
 dataset_readed$souche_description[dataset_readed$souche_description == "e.coi"] <- "escherichia coli"
 dataset_readed$souche_description[dataset_readed$souche_description == "e.cli"] <- "escherichia coli"
 dataset_readed$souche_description[dataset_readed$souche_description == "e. coli"] <- "escherichia coli"
+
+antibiotics <- c("AMX.AMP", "AMC", "CZ", "FOX", "CTX.CRO", "IPM", "GEN", "AN", "Acide.nalidixique", "ofx", "CIP", "C", "Co.trimoxazole", "Furanes", "colistine")
+
+dataset_readed[antibiotics] <- lapply(dataset_readed[antibiotics], function(x) {
+  x[x == "r"] <- "R"
+  x[x == "intermediate"] <- "R"
+  x[x == "Intermediate"] <- "R"
+  x[x == "i"] <- "R"
+  x[x == "s"] <- "S"
+  x
+})
 ```
 
 
@@ -108,23 +120,45 @@ dataset_readed %>%
 ```
 
 Hypothesis:
+```{r}
+hist(dataset_readed$age,breaks = seq(min(dataset_readed$age,na.rm = TRUE), max(dataset_readed$age, na.rm = TRUE), by = 2), 
+     col = "skyblue",      # fill color
+     border = "white",     # border color
+     main = "Distribution of Patient Ages",  # title
+     xlab = "Age",         # x-axis label
+     ylab = "Number of Patients")
+lines(ecdf(dataset_readed$age), col = "red", lwd = 2)
+```
+
+```{r}
+ks.test(dataset_readed$age, "pnorm", mean = mean(dataset_readed$age), sd=sd(dataset_readed$age))
+```
+
+```{r}
+
+```
+
 
 1.
-H0: The mean age of patients with a resistant infection is equal to the mean age of patients with a susceptible infection.\\
-H1: The mean age of patients with resistant infection is not equal to those with a susceptible infection.'
+$H_0$: The mean age of patients with a resistant infection is equal to the mean age of patients with a susceptible infection
+$H_1$: The mean age of patients with resistant infection is not equal to those with a susceptible infection
 
 
-t-test because we don't know the theoretical variance (so we will compare mu_x(average age for resistant cases) and mu_y (average age for susceptible cases))
+t-test because we don't know the theoretical variance (so we will compare $\mu_x$(average age for resistant cases) and $\mu_y$ (average age for susceptible cases))
+
+```{r}
+
+```
 
 2.
 
-H0: diabetes has no impact on resistance to antibiotic
-H1: diabetes has impact on resistance to antibiotic
+$H_0$: diabetes has no impact on resistance to antibiotic
+$H_1$: diabetes has impact on resistance to antibiotic
 
 
 3. Continue to the previous
-H0: the effect of diabetes on resistance does not depend on the type of bacteria
-H1: the effect of diabetes on resistance does depend on the type of bacteria
+$H_0$: the effect of diabetes on resistance does not depend on the type of bacteria
+$H_1$: the effect of diabetes on resistance does depend on the type of bacteria
 
 
 
