@@ -8,7 +8,7 @@ output:
 
 Members: Daryna Horetska, Yaryna Pechenenko, Andrii Hovorov Our dataset: Multi-Resistance Antibiotic Susceptibility <https://www.kaggle.com/datasets/adilimadeddinehosni/multi-resistance-antibiotic-susceptibility> Our goal: to analyse bacteria resistance to different antibiotic depending on age, previous diseases, gender and etc.
 
-Cleaning data:
+Cleaning data: - replace unknown data by NA, clean it - separate age and gender - extract clean (w/o ID) bacteria name - unified each name of bacteria and states of resistance
 
 ```{r}
 library(tidyr)
@@ -18,7 +18,7 @@ library(DescTools)
 library(ggplot2)
 
 
-dataset_readed <- read.csv("Bacteria_dataset_Multiresictance (2).csv")
+dataset_readed <- read.csv("Bacteria_dataset_Multiresictance.csv")
 
 dataset_readed[dataset_readed == "?"] <- NA
 dataset_readed[dataset_readed == "missing"] <- NA
@@ -59,9 +59,7 @@ dataset_readed[antibiotics] <- lapply(dataset_readed[antibiotics], function(x) {
   x[x == "s"] <- "S"
   x
 })
-```
 
-```{r}
 dataset_readed <- dataset_readed %>%
   separate(`age.gender`, into = c("age", "gender"), sep = "/", remove = FALSE)
 ```
@@ -76,9 +74,13 @@ table(dataset_readed$Infection_Freq)
 
 ```
 
+We have 9 different types of bacteria
+
 ```{r}
 n_distinct(dataset_readed$souche_description)
 ```
+
+There are frequency of each bacteria we have:
 
 ```{r}
 dataset_readed %>%
@@ -91,18 +93,20 @@ dataset_readed %>%
     y = "Amount") + theme_minimal()
 ```
 
-Hypothesis:
+Hypothesis: First of all we investigated age distribution
 
 ```{r}
 age <- dataset_readed$age
 hist(age,breaks = seq(min(age,na.rm = TRUE), max(age, na.rm = TRUE), by = 2), 
-     col = "skyblue",      # fill color
-     border = "white",     # border color
-     main = "Distribution of Patient Ages",  # title
-     xlab = "Age",         # x-axis label
-     ylab = "Number of Patients")
+     col = "skyblue",
+     border = "white",
+     main = "Distribution of patient ages",
+     xlab = "Age",
+     ylab = "Number of patients")
 
 ```
+
+Due to small p-value (2.2e-16 \< 0.05) we should reject $H_0$ (age distribution is normal) -\> so we won't use t-test for further hypothesis.
 
 ```{r}
 ks.test(age, "pnorm", alternative="two.sided",mean = mean(age), sd=sd(age))
@@ -122,13 +126,14 @@ lines(age_range,
 
 Because our age is not normally distributed we use Mann-Whitney U test.
 
+We divided patients into 2 groups: resistant (when patient is resistant to \> 5 types of antibiotics) and susceptible otherwise
+
 ```{r}
 abx_data <- dataset_readed[, antibiotics]
 dataset_readed$R_count <- rowSums(abx_data == "R", na.rm = TRUE)
 dataset_readed$Resistance_Status <- ifelse(dataset_readed$R_count > 5, 'Resistant', 'Susceptible')
-# Note: In this dataset, pure 'Susceptible' cases are very rare.
-group_r <- dataset_readed$age[dataset_readed$Resistance_Status == 'Resistant' & !is.na(dataset_readed$age)]
-group_s <- dataset_readed$age[dataset_readed$Resistance_Status == 'Susceptible' & !is.na(dataset_readed$age)]
+group_r <- dataset_readed$age[dataset_readed$Resistance_Status == 'Resistant']
+group_s <- dataset_readed$age[dataset_readed$Resistance_Status == 'Susceptible']
 
 ```
 
@@ -170,17 +175,16 @@ $H_0$: diabetes has no impact on resistance to antibiotic $H_1$: diabetes has im
 
 ```{r}
 
-diabetic_r <- dataset_readed$ID[dataset_readed$Resistance_Status == 'Resistant' & !is.na(dataset_readed$Diabetes) & dataset_readed$Diabetes == "True" ]
-diabetic_s <- dataset_readed$ID[dataset_readed$Resistance_Status == 'Susceptible' & !is.na(dataset_readed$Diabetes) & dataset_readed$Diabetes == "True" ]
+diabetic_r <- dataset_readed$ID[dataset_readed$Resistance_Status == 'Resistant'& dataset_readed$Diabetes == "True" ]
+diabetic_s <- dataset_readed$ID[dataset_readed$Resistance_Status == 'Susceptible' & dataset_readed$Diabetes == "True" ]
 
-nondiabetic_r <- dataset_readed$ID[dataset_readed$Resistance_Status == 'Resistant' & !is.na(dataset_readed$Diabetes) & dataset_readed$Diabetes == "No" ]
-nondiabetic_s <-  dataset_readed$ID[dataset_readed$Resistance_Status == 'Susceptible' & !is.na(dataset_readed$Diabetes) & dataset_readed$Diabetes == "No" ]
+nondiabetic_r <- dataset_readed$ID[dataset_readed$Resistance_Status == 'Resistant'& dataset_readed$Diabetes == "No" ]
+nondiabetic_s <-  dataset_readed$ID[dataset_readed$Resistance_Status == 'Susceptible'& dataset_readed$Diabetes == "No" ]
 ```
 
 ```{r}
 
-contingency_table <- table(dataset_readed$Diabetes[!is.na(dataset_readed$Diabetes)], 
-                           dataset_readed$Resistance_Status[!is.na(dataset_readed$Diabetes)])
+contingency_table <- table(dataset_readed$Diabetes, dataset_readed$Resistance_Status)
 
 contingency_table <- addmargins(contingency_table)
 
@@ -192,7 +196,6 @@ chisq.test(contingency_table)
 ```
 
 3.  Continue to the previous $H_0$: the effect of diabetes on resistance does not depend on the type of bacteria $H_1$: the effect of diabetes on resistance does depend on the type of bacteria
-
 
 ```{r}
 #install.packages("DescTools")

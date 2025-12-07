@@ -34,12 +34,6 @@ dataset_readed <- dataset_readed %>%
 dataset_readed$souche_description <- tolower(dataset_readed$souche_description)
 dataset_readed$souche_description <- trimws(dataset_readed$souche_description)
 
-# Escherichia coli
-dataset_readed$souche_description[dataset_readed$souche_description == "e coli"] <- "escherichia coli"
-dataset_readed$souche_description[dataset_readed$souche_description == "e.coi"] <- "escherichia coli"
-dataset_readed$souche_description[dataset_readed$souche_description == "e.cli"] <- "escherichia coli"
-dataset_readed$souche_description[dataset_readed$souche_description == "e. coli"] <- "escherichia coli"
-
 antibiotics <- c("AMX.AMP", "AMC", "CZ", "FOX", "CTX.CRO", "IPM", "GEN", "AN", "Acide.nalidixique", "ofx", "CIP", "C", "Co.trimoxazole", "Furanes", "colistine")
 
 dataset_readed[antibiotics] <- lapply(dataset_readed[antibiotics], function(x) {
@@ -54,20 +48,18 @@ dataset_readed[antibiotics] <- lapply(dataset_readed[antibiotics], function(x) {
 
 
 ```{r}
+# Escherichia coli
+dataset_readed$souche_description[dataset_readed$souche_description == "e.coi" | dataset_readed$souche_description == "e coli" | dataset_readed$souche_description == "e.cli" | dataset_readed$souche_description == "e. coli"] <- "escherichia coli"
+
 # Enterobacteria spp.
 dataset_readed$souche_description[dataset_readed$souche_description == "spp. enteobacteria spp."] <- "enterobacteria spp."
-dataset_readed$souche_description[dataset_readed$souche_description == "enter.bacteria"] <- "enterobacteria spp."
-dataset_readed$souche_description[dataset_readed$souche_description == "enteobacteria spp."] <- "enterobacteria spp."
-dataset_readed$souche_description[dataset_readed$souche_description == "enter.bacteria spp."] <- "enterobacteria spp."
+dataset_readed$souche_description[dataset_readed$souche_description == "enter.bacteria" | dataset_readed$souche_description == "enteobacteria spp." | dataset_readed$souche_description == "enter.bacteria spp."] <- "enterobacteria spp."
 
 # Klebsiella pneumoniae
-dataset_readed$souche_description[dataset_readed$souche_description == "klbsiella pneumoniae"] <- "klebsiella pneumoniae"
-dataset_readed$souche_description[dataset_readed$souche_description == "klebsie.lla pneumoniae"] <- "klebsiella pneumoniae"
+dataset_readed$souche_description[dataset_readed$souche_description == "klbsiella pneumoniae" |dataset_readed$souche_description == "klebsie.lla pneumoniae"] <- "klebsiella pneumoniae"
 
 # Proteus mirabilis
-dataset_readed$souche_description[dataset_readed$souche_description == "protus mirabilis"] <- "proteus mirabilis"
-dataset_readed$souche_description[dataset_readed$souche_description == "prot.eus mirabilis"] <- "proteus mirabilis"
-dataset_readed$souche_description[dataset_readed$souche_description == "proeus mirabilis"] <- "proteus mirabilis"
+dataset_readed$souche_description[dataset_readed$souche_description == "protus mirabilis" | dataset_readed$souche_description == "prot.eus mirabilis" | dataset_readed$souche_description == "proeus mirabilis"] <- "proteus mirabilis"
 
 
 dataset_readed <- na.omit(dataset_readed)
