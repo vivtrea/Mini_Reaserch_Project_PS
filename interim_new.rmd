@@ -16,6 +16,8 @@ library(dplyr)
 library(stringr)
 library(DescTools)
 library(ggplot2)
+install.packages("coin")
+library(coin)
 
 
 dataset_readed <- read.csv("Bacteria_dataset_Multiresictance.csv")
@@ -165,9 +167,36 @@ lines(gs_range,
       lwd = 2)
 ```
 
+$H_0$: resistant and susceptible groups have the same median, H_1: resistant and susceptible groups have not the same median
+
 ```{r}
 wilcox.test(group_r, group_s, alternative = "two.sided")
 ```
+W is large and p-value is greater than 0.05 so resistant and susceptible groups have the same distribution and means
+
+We decided to use permutations test to check whether means are equal:
+
+$H_0: \mu_R = \mu_S \quad H_1: \mu_R \neq \mu_S$
+test statistic = $\mu_R - \mu_S$
+
+```{r}
+set.seed(5)
+difference <- mean(group_r) - mean(group_s)
+pooled_data <- c(group_r, group_s)
+permuted_differences <- numeric(10000)
+for (i in 1:10000) {
+    shuffled_data <- sample(pooled_data)
+    n_1 <- length(group_r)
+    
+    permutation_group1 <- shuffled_data[1:n_1]
+    permutation_group2 <- shuffled_data[(n_1):length(dataset_readed$Resistance_Status)]
+    
+    permuted_differences[i] <- mean(permutation_group1) - mean(permutation_group2)
+  }
+  p_value <- sum(abs(permuted_differences) >= abs(difference)) / 10000
+  cat(p_value)
+```
+The p-value is 0.2019 that is greater than 0.05 so we fail to reject $H_0$. So the mean age of patients with a resistant infection is equal to the mean age of patients with a susceptible infection
 
 2.  
 
