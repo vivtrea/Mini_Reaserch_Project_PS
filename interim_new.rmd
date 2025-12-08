@@ -1,12 +1,56 @@
 ---
-title: "Interim project"
+title: "Mini-Research Project"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 ---
 
-Members: Daryna Horetska, Yaryna Pechenenko, Andrii Hovorov Our dataset: Multi-Resistance Antibiotic Susceptibility <https://www.kaggle.com/datasets/adilimadeddinehosni/multi-resistance-antibiotic-susceptibility> Our goal: to analyse bacteria resistance to different antibiotic depending on age, previous diseases, gender and etc.
+# Antibiotic Resistance Patterns
+
+### Team members: Daryna Horetska, Yaryna Pechenenko, Andrii Hovorov
+
+**Dataset**: Multi-Resistance Antibiotic Susceptibility <https://www.kaggle.com/datasets/adilimadeddinehosni/multi-resistance-antibiotic-susceptibility>
+
+**Our goal**: to analyse bacteria resistance to different antibiotic depending on age, previous diseases, gender and etc.
+
+## Data description
+
+#### Bacteria Sample Identifiers
+
+-   ID
+-   Souche (Strain) – bacteria name
+
+#### Patient Demographics
+
+-   Age (numeric)
+-   Gender (encoded as M or F)
+-   Location (US state, district etc.)
+
+#### Clinical Risk Factors
+
+-   Diabetes
+-   Hypertension
+-   Prior hospitalization (within the last 6 months)
+-   Frequency of recurrent infections
+
+#### Infection Information
+
+-   Specific bacterial infection identifying the illness
+-   Antibiotic Susceptibility Test Results
+
+Scope: Tested against 15 antibiotics (grouped by antibiotic family)
+
+Result Values: Resistant, Susceptible, Intermediate, or Missing data
+
+#### Metadata
+
+-   Date of sample collection
+-   Free-text comments (in various languages) All the data is raw and dirty, therefore needs data cleaning before conduction of any analysis.
+
+All the data is raw and dirty, therefore needs data cleaning before conduction of any analysis.
+
+## Data cleaning
 
 Cleaning data: - replace unknown data by NA, clean it - separate age and gender - extract clean (w/o ID) bacteria name - unified each name of bacteria and states of resistance
 
@@ -16,11 +60,9 @@ library(dplyr)
 library(stringr)
 library(DescTools)
 library(ggplot2)
-install.packages("coin")
-library(coin)
 
 
-dataset_readed <- read.csv("Bacteria_dataset_Multiresictance.csv")
+dataset_readed <- read.csv("Bacteria_dataset_Multiresictance (2).csv")
 
 dataset_readed[dataset_readed == "?"] <- NA
 dataset_readed[dataset_readed == "missing"] <- NA
@@ -32,24 +74,41 @@ dataset_readed[dataset_readed == ""] <- NA
 dataset_readed[dataset_readed == "None"] <- NA
 dataset_readed[dataset_readed == "null"] <- NA
 dataset_readed <- dataset_readed %>% 
-  separate(Souches, into = c("Strain_ID", "souche_description"), sep = " ", extra = "merge", fill = "right")
+  separate(Souches, into = c("Strain_ID", "souche_description"), 
+           sep = " ", extra = "merge", fill = "right")
 dataset_readed$souche_description <- tolower(dataset_readed$souche_description)
 dataset_readed$souche_description <- trimws(dataset_readed$souche_description)
 
 # Escherichia coli
-dataset_readed$souche_description[dataset_readed$souche_description == "e.coi" | dataset_readed$souche_description == "e coli" | dataset_readed$souche_description == "e.cli" | dataset_readed$souche_description == "e. coli"] <- "escherichia coli"
+dataset_readed$souche_description[dataset_readed$souche_description == "e.coi" 
+                                  | dataset_readed$souche_description == "e coli" 
+                                  | dataset_readed$souche_description == "e.cli" 
+                                  | dataset_readed$souche_description == 
+                                    "e. coli"] <- "escherichia coli"
 
 # Enterobacteria spp.
-dataset_readed$souche_description[dataset_readed$souche_description == "spp. enteobacteria spp."] <- "enterobacteria spp."
-dataset_readed$souche_description[dataset_readed$souche_description == "enter.bacteria" | dataset_readed$souche_description == "enteobacteria spp." | dataset_readed$souche_description == "enter.bacteria spp."] <- "enterobacteria spp."
+dataset_readed$souche_description[dataset_readed$souche_description == 
+                                    "spp. enteobacteria spp."] <- "enterobacteria spp."
+dataset_readed$souche_description[dataset_readed$souche_description == 
+                                    "enter.bacteria" 
+                                  | dataset_readed$souche_description == "enteobacteria spp." 
+                                  | dataset_readed$souche_description == 
+                                    "enter.bacteria spp."] <- "enterobacteria spp."
 
 # Klebsiella pneumoniae
-dataset_readed$souche_description[dataset_readed$souche_description == "klbsiella pneumoniae" |dataset_readed$souche_description == "klebsie.lla pneumoniae"] <- "klebsiella pneumoniae"
+dataset_readed$souche_description[dataset_readed$souche_description == "klbsiella pneumoniae" 
+                                  |dataset_readed$souche_description == 
+                                    "klebsie.lla pneumoniae"] <- "klebsiella pneumoniae"
 
 # Proteus mirabilis
-dataset_readed$souche_description[dataset_readed$souche_description == "protus mirabilis" | dataset_readed$souche_description == "prot.eus mirabilis" | dataset_readed$souche_description == "proeus mirabilis"] <- "proteus mirabilis"
+dataset_readed$souche_description[dataset_readed$souche_description == "protus mirabilis" 
+                                  | dataset_readed$souche_description == "prot.eus mirabilis" 
+                                  | dataset_readed$souche_description == 
+                                    "proeus mirabilis"] <- "proteus mirabilis"
 
-antibiotics <- c("AMX.AMP", "AMC", "CZ", "FOX", "CTX.CRO", "IPM", "GEN", "AN", "Acide.nalidixique", "ofx", "CIP", "C", "Co.trimoxazole", "Furanes", "colistine")
+antibiotics <- c("AMX.AMP", "AMC", "CZ", "FOX", "CTX.CRO", "IPM", "GEN", "AN", 
+                 "Acide.nalidixique", "ofx", "CIP", "C", 
+                 "Co.trimoxazole", "Furanes", "colistine")
 
 dataset_readed <- na.omit(dataset_readed)
 
@@ -66,6 +125,10 @@ dataset_readed <- dataset_readed %>%
   separate(`age.gender`, into = c("age", "gender"), sep = "/", remove = FALSE)
 ```
 
+## Descriptive analysis
+
+### Initial descriptive analysis of ages and infection frequency
+
 ```{r}
 dataset_readed$age <- as.numeric(dataset_readed$age)
 
@@ -75,6 +138,8 @@ cat("Infection frequency")
 table(dataset_readed$Infection_Freq)
 
 ```
+
+### Frequencies of unique bacteria souches
 
 We have 9 different types of bacteria
 
@@ -95,7 +160,7 @@ dataset_readed %>%
     y = "Amount") + theme_minimal()
 ```
 
-Hypothesis: First of all we investigated age distribution
+### Distribution of total age
 
 ```{r}
 age <- dataset_readed$age
@@ -108,11 +173,112 @@ hist(age,breaks = seq(min(age,na.rm = TRUE), max(age, na.rm = TRUE), by = 2),
 
 ```
 
-Due to small p-value (2.2e-16 \< 0.05) we should reject $H_0$ (age distribution is normal) -\> so we won't use t-test for further hypothesis.
+### Distributions of age by two groups: resistant, susceptible
+
+We divided patients into 2 groups: resistant (when patient is resistant to \> 5 types of antibiotics) and susceptible otherwise
 
 ```{r}
-ks.test(age, "pnorm", alternative="two.sided",mean = mean(age), sd=sd(age))
+abx_data <- dataset_readed[, antibiotics]
+dataset_readed$R_count <- rowSums(abx_data == "R", na.rm = TRUE)
+dataset_readed$Resistance_Status <- ifelse(dataset_readed$R_count > 5, 'Resistant', 'Susceptible')
+group_r <- dataset_readed$age[dataset_readed$Resistance_Status == 'Resistant']
+group_s <- dataset_readed$age[dataset_readed$Resistance_Status == 'Susceptible']
 ```
+
+```{r}
+par(mfrow = c(1, 2))
+hist(group_r,
+     col = "pink",
+     border = 'magenta',
+     main = "Ages with resistant infection",
+     xlab = "Age",
+     ylab = "Number of patients")
+
+hist(group_s,
+     col = "cyan",
+     border = "blue",
+     main = "Ages with susceptible infection",
+     xlab = "Age",
+     ylab = "Number of patients")
+par(mfrow = c(1, 1))
+```
+
+### Central tendencies of age by two groups: resistant, susceptible
+
+```{r}
+# 2. Create the Visualization using your dataframe 'dataset_readed'
+ggplot(dataset_readed, aes(x = Resistance_Status, y = age, fill = Resistance_Status)) +
+  geom_violin(trim = FALSE, alpha = 0.7) +
+  geom_boxplot(width = 0.1, fill = "white", outlier.shape = NA) +
+  theme_minimal()
+```
+
+### Diabetes vs. Resistance Bar Chart
+
+```{r}
+ggplot(dataset_readed, aes(x = Diabetes, fill = Resistance_Status)) +
+  
+  # 'position = "fill"' is the magic command that stacks them to 100%
+  geom_bar(position = "fill", width = 0.6) +
+  
+  # Add percent labels to the Y-axis
+  scale_y_continuous(labels = scales::percent) +
+  
+  # Custom Colors (Cyan for Susceptible, Pink for Resistant)
+  scale_fill_manual(values = c("Susceptible" = "lightgreen", "Resistant" = "orange")) +
+  
+  # Labels
+  labs(title = "Impact of Diabetes on Antibiotic Resistance",
+       subtitle = "Proportion of Resistant Infections by Diabetes Status",
+       x = "Diabetes Status",
+       y = "Percentage",
+       fill = "Infection Status") +
+  
+  theme_minimal()
+```
+
+### Heatmap of Diabetes impact on Resistance on different souches
+
+```{r}
+heatmap_data <- dataset_readed %>%
+  group_by(souche_description, Diabetes) %>%
+  summarise(
+    Total_Cases = n(),
+    Resistant_Count = sum(Resistance_Status == "Resistant"),
+    Pct_Resistant = Resistant_Count / Total_Cases,
+    .groups = "drop"
+  )
+
+ggplot(heatmap_data, aes(x = Diabetes, y = souche_description, fill = Pct_Resistant)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = scales::percent(Pct_Resistant, accuracy = 1)), color = "black", size = 3) +
+  scale_fill_gradient(low = "#fff7bc", high = "#d95f0e", labels = scales::percent) +
+  labs(
+    title = "Antibiotic Resistance Heatmap",
+    subtitle = "Percentage of Resistant Cases by Bacteria and Diabetes Status",
+    x = "Diabetes Status",
+    y = "Bacteria Type (Souche)",
+    fill = "Resistance %"
+  ) +
+  theme_minimal() + 
+  theme(
+    panel.grid = element_blank()
+  )
+```
+
+# Hypotheses testing
+
+To start with, as one of our hypotheses is based on age metric, it is natural to test whether the age is normally distributed, in hope of applying test that assume normality.
+
+First of all we investigated total age distribution
+
+$H_0$: $F_{ta}=F_N$ vs $H_1: F_{ta} \ne F_N$
+
+```{r}
+ks.test(jitter(age), "pnorm", alternative="two.sided",mean = mean(age), sd=sd(age))
+```
+
+Due to small p-value (2.2e-16 \< 0.05) we should reject $H_0$ (age distribution is normal) -\> so there is no normality assumption here.
 
 ```{r}
 plot(ecdf(age), col="cyan", pch=19, cex=0.7)
@@ -124,27 +290,16 @@ lines(age_range,
       lwd = 2)
 ```
 
-1.  $H_0$: The mean age of patients with a resistant infection is equal to the mean age of patients with a susceptible infection $H_1$: The mean age of patients with resistant infection is not equal to those with a susceptible infection
+Next, we want to see if perhaps separate groups (resistant, susceptible) follow normal distribution.
 
-Because our age is not normally distributed we use Mann-Whitney U test.
-
-We divided patients into 2 groups: resistant (when patient is resistant to \> 5 types of antibiotics) and susceptible otherwise
+## Resistant group
 
 ```{r}
-abx_data <- dataset_readed[, antibiotics]
-dataset_readed$R_count <- rowSums(abx_data == "R", na.rm = TRUE)
-dataset_readed$Resistance_Status <- ifelse(dataset_readed$R_count > 5, 'Resistant', 'Susceptible')
-group_r <- dataset_readed$age[dataset_readed$Resistance_Status == 'Resistant']
-group_s <- dataset_readed$age[dataset_readed$Resistance_Status == 'Susceptible']
-
+ks.test(jitter(group_r), "pnorm", alternative="two.sided",mean = mean(group_r), sd=sd(group_r))
 ```
 
 ```{r}
-ks.test(group_r, "pnorm", alternative="two.sided",mean = mean(group_r), sd=sd(group_r))
-```
-
-```{r}
-plot(ecdf(group_r), col="cyan", pch=19, cex=0.7)
+plot(ecdf(group_r), col="cyan", pch=19, cex=0.7, main="ECDF of Resistant group")
 gr_range <- seq(min(group_r), max(group_r), length.out = 500)
 lines(age_range,
       pnorm(gr_range, mean(group_r), sd=sd(group_r)), 
@@ -153,12 +308,16 @@ lines(age_range,
       lwd = 2)
 ```
 
+Again, the p-value is small so we reject our hypothesis that this group follows normal distribution.
+
+## Suscpetible group
+
 ```{r}
-ks.test(group_s, "pnorm", alternative="two.sided",mean = mean(group_s), sd=sd(group_s))
+ks.test(jitter(group_s), "pnorm", alternative="two.sided",mean = mean(group_s), sd=sd(group_s))
 ```
 
 ```{r}
-plot(ecdf(group_s), col="cyan", pch=19, cex=0.7)
+plot(ecdf(group_s), col="cyan", pch=19, cex=0.7, main="ECDF of Susceptible group")
 gs_range <- seq(min(group_s), max(group_s), length.out = 500)
 lines(gs_range,
       pnorm(gs_range, mean(group_s), sd=sd(group_s)), 
@@ -167,17 +326,58 @@ lines(gs_range,
       lwd = 2)
 ```
 
-$H_0$: resistant and susceptible groups have the same median, H_1: resistant and susceptible groups have not the same median
+Yet again, normality assumption cannot be applied here.
+
+Now, we want to check whether the tendencies of age in two groups are similar. To test this idea, we constructed several hypotheses
+
+## Age tendencies
+
+First we will compare overall distributions of groups using Kolmogorov-Smirnov test
+
+$H_0$: resistant and susceptible groups have the same distribution $H_1$: resistant and susceptible groups have not the same distribution
 
 ```{r}
-wilcox.test(group_r, group_s, alternative = "two.sided")
+ks.test(jitter(group_r), jitter(group_s))
 ```
-W is large and p-value is greater than 0.05 so resistant and susceptible groups have the same distribution and means
 
-We decided to use permutations test to check whether means are equal:
+```{r}
+plot(ecdf(group_s), col="cyan", main="ECDFs comparison")
+s_range <- seq(min(group_s), max(group_s), length.out = 500)
+lines(s_range, 
+      ecdf(group_r)(s_range), 
+      col = "magenta", 
+      lwd = 2)
+```
 
-$H_0: \mu_R = \mu_S \quad H_1: \mu_R \neq \mu_S$
-test statistic = $\mu_R - \mu_S$
+Difference between distribution of resistant group and susceptible are pretty small, p-value 0,4808 is greater than 0,05 so we fail to reject $H_0$ Therefore the distribution are assumed to be equal
+
+### Mean age of patients
+
+Next, even though KS test showed nice result, it could be influenced by standard deviations. Now we want to test if the central tendencies are similar. We decided to focus on means
+
+$H_0$: The mean age of patients with a resistant infection is equal to the mean age of patients with a susceptible infection
+
+$H_1$: The mean age of patients with resistant infection is not equal to those with a susceptible infection
+
+As our data is not normally distributed, we cannot use t-test here. So we decided to use permutations test to check whether means are equal:
+
+$H_0: \mu_R = \mu_S \quad H_1: \mu_R \neq \mu_S$ test statistic = $\mu_R - \mu_S$
+
+#### How it works:
+
+We construct a distribution of test statistic $\mu_R - \mu_S$, which under null hypothesis should tend to $0$.
+
+First, we calculate the difference of mean ages in initial groups.
+
+We add this value to our distribution data.
+
+Then we permute equal number of data points (ages) from to groups between these groups.
+
+We recalculate means, get new difference and add it to distribution.
+
+Then we can calculate p-value using the new constructed sampling distribution.
+
+Even though by CLT this distribution is approximately normal, we calculate p-value discretely, not using z-quantiles.
 
 ```{r}
 set.seed(5)
@@ -194,48 +394,145 @@ for (i in 1:10000) {
     permuted_differences[i] <- mean(permutation_group1) - mean(permutation_group2)
   }
   p_value <- sum(abs(permuted_differences) >= abs(difference)) / 10000
-  cat(p_value)
+  cat("P-value of permutations test =", p_value, "\n")
+
 ```
+
+```{r}
+hist(permuted_differences, col = "yellow", freq=FALSE, main = "Distribution of permuted differences")
+curve(dnorm(x, mean = mean(permuted_differences), sd = sd(permuted_differences)), 
+      col = "darkred", 
+      lwd = 2,
+      add = TRUE)
+```
+
 The p-value is 0.2019 that is greater than 0.05 so we fail to reject $H_0$. So the mean age of patients with a resistant infection is equal to the mean age of patients with a susceptible infection
 
-2.  
+## Diabetes impact on resistance
 
-$H_0$: diabetes has no impact on resistance to antibiotic $H_1$: diabetes has impact on resistance to antibiotic
+As we have some info on risk factors in our dataset, we decided to test whether some of them influence the resistance.
+
+Though by itself, long term diseases like diabetes or hypertension do not directly influence resistance of bacterial infections to antibiotics, they do influence the frequency of illness, which then influences antibiotic consumption and that influences bacterial adaptability (which is extremely fast) and poses a resistance.
+
+$H_0$: diabetes has no impact on resistance to antibiotic
+
+$H_1$: diabetes has impact on resistance to antibiotic
 
 ```{r}
 
-diabetic_r <- dataset_readed$ID[dataset_readed$Resistance_Status == 'Resistant'& dataset_readed$Diabetes == "True" ]
-diabetic_s <- dataset_readed$ID[dataset_readed$Resistance_Status == 'Susceptible' & dataset_readed$Diabetes == "True" ]
+diabetic_r <- dataset_readed$ID[dataset_readed$Resistance_Status == 
+                                  'Resistant'& dataset_readed$Diabetes == "True" ]
+diabetic_s <- dataset_readed$ID[dataset_readed$Resistance_Status == 
+                                  'Susceptible' & dataset_readed$Diabetes == "True" ]
 
-nondiabetic_r <- dataset_readed$ID[dataset_readed$Resistance_Status == 'Resistant'& dataset_readed$Diabetes == "No" ]
-nondiabetic_s <-  dataset_readed$ID[dataset_readed$Resistance_Status == 'Susceptible'& dataset_readed$Diabetes == "No" ]
+nondiabetic_r <- dataset_readed$ID[dataset_readed$Resistance_Status == 
+                                     'Resistant'& dataset_readed$Diabetes == "No" ]
+nondiabetic_s <-  dataset_readed$ID[dataset_readed$Resistance_Status == 
+                                      'Susceptible'& dataset_readed$Diabetes == "No" ]
 ```
 
 ```{r}
 
 contingency_table <- table(dataset_readed$Diabetes, dataset_readed$Resistance_Status)
 
-contingency_table <- addmargins(contingency_table)
+contingency_table_marings <- addmargins(contingency_table)
 
-print(contingency_table)
+print(contingency_table_marings)
 ```
 
 ```{r}
 chisq.test(contingency_table)
 ```
 
-3.  Continue to the previous $H_0$: the effect of diabetes on resistance does not depend on the type of bacteria $H_1$: the effect of diabetes on resistance does depend on the type of bacteria
-
-```{r}
-#install.packages("DescTools")
-```
+Here we can see, that using Chi-Squared Test for independence the diabetes seems to have no statistically significant impact on resistance of bacterial infection But now we will dive deeper. Continue to the previous, we want to check if diabetes influence depends on bacteria type. We will focus on top3 bacteria infections from dataset, as they have the most datapoints, and may pose some influence of diabetes on the resistance $H_0$: the effect of diabetes on resistance does not depend on the type of bacteria $H_1$: the effect of diabetes on resistance does depend on the type of bacteria
 
 ```{r}
 top3_bacteria <- c("escherichia coli", "enterobacteria spp.", "proteus mirabilis")
-data_top3 <- dataset_readed[dataset_readed$souche_description %in% top3_bacteria & !is.na(dataset_readed$Diabetes), ]
+data_top3 <- dataset_readed[dataset_readed$souche_description 
+                            %in% top3_bacteria & !is.na(dataset_readed$Diabetes), ]
 
 table_3way <- table(data_top3$Diabetes, data_top3$Resistance_Status, data_top3$souche_description)
-
+table_3way_safe <- array(as.numeric(table_3way), 
+                         dim = dim(table_3way), 
+                         dimnames = dimnames(table_3way))
 #Breslow-Day test (tests for homogeneity of odds ratios across strata)
-BreslowDayTest(table_3way)
+BreslowDayTest(table_3way_safe)
 ```
+
+We see that in fact, using Breslow-Day test, diabetes influence does depend on bacteria type, as the p-value is smal and we reject null hypothesis of equals Odds Ratios (look into conclusions for more detailed explanation)! We can further investigate our discrepnacy with initial heatmap from data visualizations and the outcome of this test
+
+```{r}
+#calculating odds ratios
+or_check <- dataset_readed %>%
+  filter(!is.na(Diabetes), !is.na(Resistance_Status), !is.na(souche_description)) %>%
+  group_by(souche_description) %>%
+  summarise(
+
+    A = sum(Diabetes == "True" & Resistance_Status == "Resistant"),
+    B = sum(Diabetes == "True" & Resistance_Status == "Susceptible"),
+    C = sum(Diabetes == "No" & Resistance_Status == "Resistant"),
+    D = sum(Diabetes == "No" & Resistance_Status == "Susceptible"),
+    
+    #adding +0.5 to avoid division by zero (Haldane correction)
+    Odds_Ratio = ((A + 0.5) * (D + 0.5)) / ((B + 0.5) * (C + 0.5)),
+    
+    #check sample size to see if heatmap was misleading
+    Total_Patients = n()
+  )
+
+print(or_check)
+```
+
+We see that in fact there are odds ratios that are far from 1. So the heatmap, although being a nice visual, does not represent a relation that is indeed present.
+
+## Conclusions
+
+Our project was mainly aimed for discovering patterns in antibiotic resistance, approving theoretical knowledge from P&S course and biology with practical applications of testing hypothesis. For instance, it is known that diabetes has an impact on immune system but we wanted to prove whether this impact influences antibiotic resistance. To start with, we wanted to use age as the fisrt key metric as it is numeric. To use it for testing, it would be convenient if it had a normal distribution. As under normality, we could apply T-tests for our hypotheses. Therefore, we performed Kolmogorov-Smirnov test to check whether age distribution is normal, and concluded that it is indeed not. That has had a really worthening effect on our framework as we had to apply tests that not require normality. Our first hypothesis regarded if the mean age of patients with a resistant infection is equal to the mean age of patients with a susceptible infection. Yet, as our distribution is not normal, we used the following approach:
+
+1.  Kolmogorov test for normality of total age distribution -\> **Rejected**
+
+2.  Kolmogorov test for distribution of two groups of patients (susceptible, resistant) for normality -\> **Rejected**
+
+3.  Kolmogorov-Smirnov test for whether distributions of two groups of patients are equal. -\> **Not Rejected**
+
+4.  Permutations test for equality of mean ages of two groups (susceptible, resistant) -\> **Not Rejected**
+
+\
+Therefore, we can conclude that the age does not influence the resistance of bacterial infection. Next, as our dataset contains data on different risk factors, we dive deeper into one of them, specifically diabetes. Our aim here was firstly to test whether there is connection between having diabetes and more resistant infection at all. And if it turns out true, to test if the type of bacteria has an impact on that connection, meaning impact of diabetes on resistance depends on type of infection for which we test the resistance. Therefore, we performed the following:
+
+1.  Construct a contingency table for Chi-squared test for independence
+
+2.  Perform Chi-Squared test for independence (of diabetes and resistance factor) -\> **Not rejected**
+
+\
+So we now know, that diabetes does overall does not influance resistance of bacteria. We now would like to test more on whether the type of infection matters for diabetes to start influancing resistance. Our null hypothesis is the following: the effect of diabetes on resistance does not depend on the type of bacteria We took into account only top3 most frequent types of bacteria infection:\
+**Escherichia coli, Enterobacteria spp., Proteus Mirabilis**
+
+Therefore we used Breslow-Day Test on Homogeneity of Odds Ratios
+
+1.  We first construct three tables for each strata(type of bacteria). The table is similar to the one previous test (diabetes/resistance)
+
+2.  For each strata we calculate Odds Ratio (OR)
+
+    |              | Resistant | Susceptible |
+    |--------------|-----------|-------------|
+    | Diabetic     | a         | b           |
+    | Non-Diabetic | c         | d           |
+
+    $$
+    OR = \dfrac{a}{c}\cdot\dfrac{d}{b}
+    $$
+
+So if the ratio of diabetic and non diabetic having resistance is the same as those of susceptible, then OR should be close to 1.
+
+In order to check if the type of bacteria doesn't influence the diabetes factor on resistance, we should compare OR of all strata (3 types of bacteria)
+
+$H_0$ : $OR_1=OR_2=OR_3$ , bacteria type does not affect diabetes factor on resistance
+
+$H_1$: $OR_1\ne OR_2 \ne OR_3$ , bacteria type does affect diabetes factor on resistance
+
+3.  Then the test uses chi-squared statistic (expected/observed values) to test these hypotheses. -\> **Rejected**
+
+So the effect of diabetes on resistence in fact appears and does depend on bacteria type.
+
+To sum up, in this mini-research project we have worked with practical dataset from clinical research. We have examined key metrics (age) and risk factors (diabetes). We have succesfully checked resistance patterns. Precisely, there is no pattern regarding age of patients, however, there is a great pattern in having diabetes and specific type of infection that through all data asserts resistance to that infection. In future, to continue our research, possible consequent areas for improvement could be building a logistic regression on classifying bacterial infection (resistant/susceptible), examining dependance of resistance to specific geographical area (South, East, West, North).
