@@ -1,0 +1,896 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Mini-Research Project},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Mini-Research Project}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+\section{Antibiotic Resistance
+Patterns}\label{antibiotic-resistance-patterns}
+
+\subsubsection{Team members: Daryna Horetska, Yaryna Pechenenko, Andrii
+Hovorov}\label{team-members-daryna-horetska-yaryna-pechenenko-andrii-hovorov}
+
+\textbf{Dataset}: Multi-Resistance Antibiotic Susceptibility
+
+10 710 records that contains bacterial isolates, associated risk
+factors, and antibiotic susceptibility results per patient.
+
+\url{https://www.kaggle.com/datasets/adilimadeddinehosni/multi-resistance-antibiotic-susceptibility}
+
+\textbf{Our goal}: to analyse bacteria resistance to different
+antibiotic depending on age, previous diseases, gender etc.
+
+\subsection{Data description}\label{data-description}
+
+\paragraph{Bacteria Sample
+Identifiers}\label{bacteria-sample-identifiers}
+
+\begin{itemize}
+\tightlist
+\item
+  ID
+\item
+  Souche (Strain) -- bacteria name
+\end{itemize}
+
+\paragraph{Patient Demographics}\label{patient-demographics}
+
+\begin{itemize}
+\tightlist
+\item
+  Age (numeric)
+\item
+  Gender (encoded as M or F)
+\item
+  Location (US state, district etc.)
+\end{itemize}
+
+\paragraph{Clinical Risk Factors}\label{clinical-risk-factors}
+
+\begin{itemize}
+\tightlist
+\item
+  Diabetes
+\item
+  Hypertension
+\item
+  Prior hospitalization (within the last 6 months)
+\item
+  Frequency of recurrent infections
+\end{itemize}
+
+\paragraph{Infection Information}\label{infection-information}
+
+\begin{itemize}
+\tightlist
+\item
+  Specific bacterial infection identifying the illness
+\item
+  Antibiotic Susceptibility Test Results
+\end{itemize}
+
+Scope: Tested against 15 antibiotics (grouped by antibiotic family)
+
+Result Values: Resistant, Susceptible, Intermediate, or Missing data
+
+\paragraph{Metadata}\label{metadata}
+
+\begin{itemize}
+\tightlist
+\item
+  Date of sample collection
+\item
+  Free-text comments (in various languages)
+\end{itemize}
+
+All the data is raw and dirty, therefore needs data cleaning before
+conduction of any analysis.
+
+\subsubsection{Set up necessary
+libraries}\label{set-up-necessary-libraries}
+
+First, let us set up all the necessary libraries for our research in
+purpose of data visualization, descriptive analysis, text cleaning,
+separating columns, providing Breslow-Day test.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyr)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(stringr)}
+\FunctionTok{library}\NormalTok{(DescTools)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'DescTools' was built under R version 4.5.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Data cleaning}\label{data-cleaning}
+
+Cleaning data: - replace unknown data by NA, clean it - separate age and
+gender - extract clean (w/o ID) bacteria name - unified each name of
+bacteria and states of resistance
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataset\_readed }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"Bacteria\_dataset\_Multiresictance.csv"}\NormalTok{)}
+
+\NormalTok{dataset\_readed[dataset\_readed }\SpecialCharTok{==} \StringTok{"?"}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{dataset\_readed[dataset\_readed }\SpecialCharTok{==} \StringTok{"missing"}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{dataset\_readed[dataset\_readed }\SpecialCharTok{==} \StringTok{"unknown"}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{dataset\_readed[dataset\_readed }\SpecialCharTok{==} \StringTok{"error"}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{dataset\_readed[dataset\_readed }\SpecialCharTok{==} \StringTok{"???"}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{dataset\_readed[dataset\_readed }\SpecialCharTok{==} \StringTok{"??"}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{dataset\_readed[dataset\_readed }\SpecialCharTok{==} \StringTok{""}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{dataset\_readed[dataset\_readed }\SpecialCharTok{==} \StringTok{"None"}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{dataset\_readed[dataset\_readed }\SpecialCharTok{==} \StringTok{"null"}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{dataset\_readed }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{separate}\NormalTok{(Souches, }\AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{"Strain\_ID"}\NormalTok{, }\StringTok{"souche\_description"}\NormalTok{), }
+           \AttributeTok{sep =} \StringTok{" "}\NormalTok{, }\AttributeTok{extra =} \StringTok{"merge"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"right"}\NormalTok{)}
+\NormalTok{dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\OtherTok{\textless{}{-}} \FunctionTok{tolower}\NormalTok{(dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description)}
+\NormalTok{dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\OtherTok{\textless{}{-}} \FunctionTok{trimws}\NormalTok{(dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description)}
+
+\CommentTok{\# Escherichia coli}
+\NormalTok{dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description[dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} \StringTok{"e.coi"} 
+                                  \SpecialCharTok{|}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} \StringTok{"e coli"} 
+                                  \SpecialCharTok{|}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} \StringTok{"e.cli"} 
+                                  \SpecialCharTok{|}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} 
+                                    \StringTok{"e. coli"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"escherichia coli"}
+
+\CommentTok{\# Enterobacteria spp.}
+\NormalTok{dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description[dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} 
+                                    \StringTok{"spp. enteobacteria spp."}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"enterobacteria spp."}
+\NormalTok{dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description[dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} 
+                                    \StringTok{"enter.bacteria"} 
+                                  \SpecialCharTok{|}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} \StringTok{"enteobacteria spp."} 
+                                  \SpecialCharTok{|}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} 
+                                    \StringTok{"enter.bacteria spp."}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"enterobacteria spp."}
+
+\CommentTok{\# Klebsiella pneumoniae}
+\NormalTok{dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description[dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} \StringTok{"klbsiella pneumoniae"} 
+                                  \SpecialCharTok{|}\NormalTok{dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} 
+                                    \StringTok{"klebsie.lla pneumoniae"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"klebsiella pneumoniae"}
+
+\CommentTok{\# Proteus mirabilis}
+\NormalTok{dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description[dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} \StringTok{"protus mirabilis"} 
+                                  \SpecialCharTok{|}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} \StringTok{"prot.eus mirabilis"} 
+                                  \SpecialCharTok{|}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }\SpecialCharTok{==} 
+                                    \StringTok{"proeus mirabilis"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"proteus mirabilis"}
+
+\NormalTok{antibiotics }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"AMX.AMP"}\NormalTok{, }\StringTok{"AMC"}\NormalTok{, }\StringTok{"CZ"}\NormalTok{, }\StringTok{"FOX"}\NormalTok{, }\StringTok{"CTX.CRO"}\NormalTok{, }\StringTok{"IPM"}\NormalTok{, }\StringTok{"GEN"}\NormalTok{, }\StringTok{"AN"}\NormalTok{, }
+                 \StringTok{"Acide.nalidixique"}\NormalTok{, }\StringTok{"ofx"}\NormalTok{, }\StringTok{"CIP"}\NormalTok{, }\StringTok{"C"}\NormalTok{, }
+                 \StringTok{"Co.trimoxazole"}\NormalTok{, }\StringTok{"Furanes"}\NormalTok{, }\StringTok{"colistine"}\NormalTok{)}
+
+\NormalTok{dataset\_readed }\OtherTok{\textless{}{-}} \FunctionTok{na.omit}\NormalTok{(dataset\_readed)}
+
+\NormalTok{dataset\_readed[antibiotics] }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(dataset\_readed[antibiotics], }\ControlFlowTok{function}\NormalTok{(x) \{}
+\NormalTok{  x[x }\SpecialCharTok{==} \StringTok{"r"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"R"}
+\NormalTok{  x[x }\SpecialCharTok{==} \StringTok{"intermediate"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"R"}
+\NormalTok{  x[x }\SpecialCharTok{==} \StringTok{"Intermediate"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"R"}
+\NormalTok{  x[x }\SpecialCharTok{==} \StringTok{"i"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"R"}
+\NormalTok{  x[x }\SpecialCharTok{==} \StringTok{"s"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"S"}
+\NormalTok{  x}
+\NormalTok{\})}
+
+\NormalTok{dataset\_readed }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{separate}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{age.gender}\StringTok{\textasciigrave{}}\NormalTok{, }\AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{"age"}\NormalTok{, }\StringTok{"gender"}\NormalTok{), }\AttributeTok{sep =} \StringTok{"/"}\NormalTok{, }\AttributeTok{remove =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+After cleaning our data 8281 records remain.
+
+\subsection{Descriptive analysis}\label{descriptive-analysis}
+
+\subsubsection{Initial descriptive analysis of ages and infection
+frequency}\label{initial-descriptive-analysis-of-ages-and-infection-frequency}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataset\_readed}\SpecialCharTok{$}\NormalTok{age }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(dataset\_readed}\SpecialCharTok{$}\NormalTok{age)}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Descriptive analysis of ages}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Descriptive analysis of ages
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(dataset\_readed}\SpecialCharTok{$}\NormalTok{age)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00   25.00   45.00   45.67   67.00   90.00
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{Mode}\NormalTok{(dataset\_readed}\SpecialCharTok{$}\NormalTok{age)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 50
+## attr(,"freq")
+## [1] 167
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{Kurt}\NormalTok{(dataset\_readed}\SpecialCharTok{$}\NormalTok{age)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -1.050738
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{Skew}\NormalTok{(dataset\_readed}\SpecialCharTok{$}\NormalTok{age)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.02307794
+\end{verbatim}
+
+We can observe that in our data there is wide spread of age groups (from
+infants to elderly persons). The mode age is 50 (that contains 167
+times). Therefore, the age is not heavily skewed toward young people.
+
+As the skewness is close to 0 so age distribution is almost symmetrical
+so we have nearly equal number of younger and older patients.
+
+Kurtosis is negative (Platykurtic) so the distribution has thick tails.
+
+\subsubsection{Frequencies of unique bacteria
+souches}\label{frequencies-of-unique-bacteria-souches}
+
+We have 9 different types of bacteria.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{n\_distinct}\NormalTok{(dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 9
+\end{verbatim}
+
+There are frequencies of each bacteria we have so in the further part we
+will base our test only on the most frequent types:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataset\_readed }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(souche\_description, }\AttributeTok{sort =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(souche\_description, n), }\AttributeTok{y =}\NormalTok{ n)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Frequency of Bacteria Species"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Bacteria"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Amount"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{interim_new_files/figure-latex/unnamed-chunk-5-1.pdf}}
+
+\subsubsection{Distribution of total
+age}\label{distribution-of-total-age}
+
+As analysed before, we can observe that out distribution is quite
+symmetrical and platykurtic, indeed. For our further ideas on influence
+of diabetes it would be crucial to know that age distribution of groups
+of patients that have either resistant or susceptible infection. As
+diabetes is more common among elderly people, if one our groups would
+have more elder people we wouldn't be able to make conclusions on
+dependence between these two metrics (diabetes and resistance).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{age }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{age}
+\FunctionTok{hist}\NormalTok{(age,}\AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(age,}\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\FunctionTok{max}\NormalTok{(age, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{by =} \DecValTok{2}\NormalTok{), }
+     \AttributeTok{col =} \StringTok{"skyblue"}\NormalTok{,}
+     \AttributeTok{border =} \StringTok{"white"}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Distribution of patient ages"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Age"}\NormalTok{,}
+     \AttributeTok{ylab =} \StringTok{"Number of patients"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{interim_new_files/figure-latex/unnamed-chunk-6-1.pdf}}
+
+\subsubsection{Distributions of age by two groups: resistant,
+susceptible}\label{distributions-of-age-by-two-groups-resistant-susceptible}
+
+We divided patients into 2 groups: resistant (when patient is resistant
+to \textgreater{} 5 types of antibiotics) and susceptible otherwise
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{abx\_data }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed[, antibiotics]}
+\NormalTok{dataset\_readed}\SpecialCharTok{$}\NormalTok{R\_count }\OtherTok{\textless{}{-}} \FunctionTok{rowSums}\NormalTok{(abx\_data }\SpecialCharTok{==} \StringTok{"R"}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{dataset\_readed}\SpecialCharTok{$}\NormalTok{Resistance\_Status }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(dataset\_readed}\SpecialCharTok{$}\NormalTok{R\_count }\SpecialCharTok{\textgreater{}} \DecValTok{5}\NormalTok{, }\StringTok{\textquotesingle{}Resistant\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Susceptible\textquotesingle{}}\NormalTok{)}
+\NormalTok{group\_r }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{age[dataset\_readed}\SpecialCharTok{$}\NormalTok{Resistance\_Status }\SpecialCharTok{==} \StringTok{\textquotesingle{}Resistant\textquotesingle{}}\NormalTok{]}
+\NormalTok{group\_s }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{age[dataset\_readed}\SpecialCharTok{$}\NormalTok{Resistance\_Status }\SpecialCharTok{==} \StringTok{\textquotesingle{}Susceptible\textquotesingle{}}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\FunctionTok{hist}\NormalTok{(group\_r,}
+     \AttributeTok{col =} \StringTok{"pink"}\NormalTok{,}
+     \AttributeTok{border =} \StringTok{\textquotesingle{}magenta\textquotesingle{}}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Ages with resistant infection"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Age"}\NormalTok{,}
+     \AttributeTok{ylab =} \StringTok{"Number of patients"}\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(group\_s,}
+     \AttributeTok{col =} \StringTok{"cyan"}\NormalTok{,}
+     \AttributeTok{border =} \StringTok{"blue"}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Ages with susceptible infection"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Age"}\NormalTok{,}
+     \AttributeTok{ylab =} \StringTok{"Number of patients"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{interim_new_files/figure-latex/unnamed-chunk-8-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Central tendencies of age by two groups: resistant,
+susceptible}\label{central-tendencies-of-age-by-two-groups-resistant-susceptible}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 2. Create the Visualization using your dataframe \textquotesingle{}dataset\_readed\textquotesingle{}}
+\FunctionTok{ggplot}\NormalTok{(dataset\_readed, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Resistance\_Status, }\AttributeTok{y =}\NormalTok{ age, }\AttributeTok{fill =}\NormalTok{ Resistance\_Status)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_violin}\NormalTok{(}\AttributeTok{trim =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.7}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{width =} \FloatTok{0.1}\NormalTok{, }\AttributeTok{fill =} \StringTok{"white"}\NormalTok{, }\AttributeTok{outlier.shape =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{interim_new_files/figure-latex/unnamed-chunk-9-1.pdf}}
+
+From this violin plot we can assume that age distributions of
+susceptible and resistant groups are similar so we will test this
+assumption using Kolmogorov-Smirnov test.
+
+\subsubsection{Diabetes vs.~Resistance Bar
+Chart}\label{diabetes-vs.-resistance-bar-chart}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(dataset\_readed, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Diabetes, }\AttributeTok{fill =}\NormalTok{ Resistance\_Status)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{position =} \StringTok{"fill"}\NormalTok{, }\AttributeTok{width =} \FloatTok{0.6}\NormalTok{) }\SpecialCharTok{+}
+  
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\NormalTok{percent) }\SpecialCharTok{+}
+  
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Susceptible"} \OtherTok{=} \StringTok{"lightgreen"}\NormalTok{, }\StringTok{"Resistant"} \OtherTok{=} \StringTok{"orange"}\NormalTok{)) }\SpecialCharTok{+}
+  
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Impact of Diabetes on Antibiotic Resistance"}\NormalTok{,}
+       \AttributeTok{subtitle =} \StringTok{"Proportion of Resistant Infections by Diabetes Status"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Diabetes Status"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Percentage"}\NormalTok{,}
+       \AttributeTok{fill =} \StringTok{"Infection Status"}\NormalTok{) }\SpecialCharTok{+}
+  
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{interim_new_files/figure-latex/unnamed-chunk-10-1.pdf}}
+
+From this plot we observe that the proportion of people with resistant
+and susceptible infection almost equal among diabetes so we are going to
+test it and dive deeper into dependences for some types of bacteria.
+
+\subsubsection{Heatmap of diabetes impact on resistance on different
+souches}\label{heatmap-of-diabetes-impact-on-resistance-on-different-souches}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{heatmap\_data }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(souche\_description, Diabetes) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{Total\_Cases =} \FunctionTok{n}\NormalTok{(),}
+    \AttributeTok{Resistant\_Count =} \FunctionTok{sum}\NormalTok{(Resistance\_Status }\SpecialCharTok{==} \StringTok{"Resistant"}\NormalTok{),}
+    \AttributeTok{Pct\_Resistant =}\NormalTok{ Resistant\_Count }\SpecialCharTok{/}\NormalTok{ Total\_Cases,}
+    \AttributeTok{.groups =} \StringTok{"drop"}
+\NormalTok{  )}
+
+\FunctionTok{ggplot}\NormalTok{(heatmap\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Diabetes, }\AttributeTok{y =}\NormalTok{ souche\_description, }\AttributeTok{fill =}\NormalTok{ Pct\_Resistant)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_tile}\NormalTok{(}\AttributeTok{color =} \StringTok{"white"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ scales}\SpecialCharTok{::}\FunctionTok{percent}\NormalTok{(Pct\_Resistant, }\AttributeTok{accuracy =} \DecValTok{1}\NormalTok{)), }\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{size =} \DecValTok{3}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_gradient}\NormalTok{(}\AttributeTok{low =} \StringTok{"\#fff7bc"}\NormalTok{, }\AttributeTok{high =} \StringTok{"\#d95f0e"}\NormalTok{, }\AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\NormalTok{percent) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Antibiotic Resistance Heatmap"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Percentage of Resistant Cases by Bacteria and Diabetes Status"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Diabetes Status"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Bacteria Type (Souche)"}\NormalTok{,}
+    \AttributeTok{fill =} \StringTok{"Resistance \%"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{panel.grid =} \FunctionTok{element\_blank}\NormalTok{()}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{interim_new_files/figure-latex/unnamed-chunk-11-1.pdf}}
+
+From this heat map we can observe that most types of bacteria have the
+same resistance level not depending on diabetes status. But we also
+should test it to get more precise result.
+
+\section{Hypotheses testing}\label{hypotheses-testing}
+
+To start with, as one of our hypotheses is based on age metric, it is
+natural to test the similarity of resistant and susceptible age group
+distributions.
+
+\subsection{Age tendencies}\label{age-tendencies}
+
+First we will compare overall distributions of groups using
+Kolmogorov-Smirnov test \(H_0\): resistant and susceptible groups have
+the same distribution \(H_1\): resistant and susceptible groups have not
+the same distribution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ks.test}\NormalTok{(}\FunctionTok{jitter}\NormalTok{(group\_r), }\FunctionTok{jitter}\NormalTok{(group\_s))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Asymptotic two-sample Kolmogorov-Smirnov test
+## 
+## data:  jitter(group_r) and jitter(group_s)
+## D = 0.01969, p-value = 0.4108
+## alternative hypothesis: two-sided
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{ecdf}\NormalTok{(group\_s), }\AttributeTok{col=}\StringTok{"cyan"}\NormalTok{, }\AttributeTok{main=}\StringTok{"ECDFs comparison"}\NormalTok{)}
+\NormalTok{s\_range }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(group\_s), }\FunctionTok{max}\NormalTok{(group\_s), }\AttributeTok{length.out =} \DecValTok{500}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(s\_range, }
+      \FunctionTok{ecdf}\NormalTok{(group\_r)(s\_range), }
+      \AttributeTok{col =} \StringTok{"magenta"}\NormalTok{, }
+      \AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{interim_new_files/figure-latex/unnamed-chunk-13-1.pdf}}
+
+Difference between distribution of resistant group and susceptible are
+pretty small, p-value 0,4808 is greater than 0,05 so we fail to reject
+\(H_0\) Therefore the distributions of resistant and susceptible groups
+are equal. Kolmogorov-Smirnov test for whether distributions of two
+groups of patients are equal. -\textgreater{} \textbf{Not Rejected}
+
+Therefore, we can conclude that the age does not influence the
+resistance of bacterial infection.
+
+\subsection{Diabetes impact on
+resistance}\label{diabetes-impact-on-resistance}
+
+As we have some info on risk factors in our dataset, we decided to test
+whether some of them influence the resistance.
+
+Our aim here was firstly to test whether there is connection between
+having diabetes and more resistant infection at all. And then we can
+further test if the type of bacteria has an impact on that connection,
+meaning impact of diabetes on resistance depends on type of infection
+for which we test the resistance. Therefore, we are performing the
+following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Construct a contingency table for Chi-squared test for independence
+\item
+  Perform Chi-Squared test for independence (of diabetes and resistance
+  factor)
+\end{enumerate}
+
+Though by itself, long term diseases like diabetes or hypertension do
+not directly influence resistance of bacterial infections to
+antibiotics, they do influence the frequency of illness, which then
+influences antibiotic consumption and that influences bacterial
+adaptability (which is extremely fast) and poses a resistance.
+
+\(H_0\): people who have diabetes are not more prone to have resistance
+to antibiotics \(H_1\): people who have diabetes are more prone to have
+resistance to antibiotics
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{diabetic\_r }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{ID[dataset\_readed}\SpecialCharTok{$}\NormalTok{Resistance\_Status }\SpecialCharTok{==} 
+                                  \StringTok{\textquotesingle{}Resistant\textquotesingle{}}\SpecialCharTok{\&}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{Diabetes }\SpecialCharTok{==} \StringTok{"True"}\NormalTok{ ]}
+\NormalTok{diabetic\_s }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{ID[dataset\_readed}\SpecialCharTok{$}\NormalTok{Resistance\_Status }\SpecialCharTok{==} 
+                                  \StringTok{\textquotesingle{}Susceptible\textquotesingle{}} \SpecialCharTok{\&}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{Diabetes }\SpecialCharTok{==} \StringTok{"True"}\NormalTok{ ]}
+
+\NormalTok{nondiabetic\_r }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{ID[dataset\_readed}\SpecialCharTok{$}\NormalTok{Resistance\_Status }\SpecialCharTok{==} 
+                                     \StringTok{\textquotesingle{}Resistant\textquotesingle{}}\SpecialCharTok{\&}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{Diabetes }\SpecialCharTok{==} \StringTok{"No"}\NormalTok{ ]}
+\NormalTok{nondiabetic\_s }\OtherTok{\textless{}{-}}\NormalTok{  dataset\_readed}\SpecialCharTok{$}\NormalTok{ID[dataset\_readed}\SpecialCharTok{$}\NormalTok{Resistance\_Status }\SpecialCharTok{==} 
+                                      \StringTok{\textquotesingle{}Susceptible\textquotesingle{}}\SpecialCharTok{\&}\NormalTok{ dataset\_readed}\SpecialCharTok{$}\NormalTok{Diabetes }\SpecialCharTok{==} \StringTok{"No"}\NormalTok{ ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{contingency\_table }\OtherTok{\textless{}{-}} \FunctionTok{table}\NormalTok{(dataset\_readed}\SpecialCharTok{$}\NormalTok{Diabetes, dataset\_readed}\SpecialCharTok{$}\NormalTok{Resistance\_Status)}
+
+\NormalTok{contingency\_table\_marings }\OtherTok{\textless{}{-}} \FunctionTok{addmargins}\NormalTok{(contingency\_table)}
+
+\FunctionTok{print}\NormalTok{(contingency\_table\_marings)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       
+##        Resistant Susceptible  Sum
+##   No        2812        3756 6568
+##   True       751         962 1713
+##   Sum       3563        4718 8281
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(contingency\_table)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test with Yates' continuity correction
+## 
+## data:  contingency_table
+## X-squared = 0.54406, df = 1, p-value = 0.4608
+\end{verbatim}
+
+Here we can see, that using Chi-Squared Test for independence the
+diabetes seems to have no statistically significant impact on resistance
+of bacterial infection But now we will dive deeper. Continue to the
+previous, we want to check if diabetes influence depends on bacteria
+type. We will focus on top3 bacteria infections from dataset, as they
+have the most datapoints, and may pose some influence of diabetes on the
+resistance \(H_0\): the effect of diabetes on resistance does not depend
+on the type of bacteria \(H_1\): the effect of diabetes on resistance
+does depend on the type of bacteria
+
+\subsubsection{Diabetes impact depending on type of
+bacteria}\label{diabetes-impact-depending-on-type-of-bacteria}
+
+We are now going to construct strata tables for top 3 most frequent
+bacteria types (\textbf{Escherichia coli, Enterobacteria spp., Proteus
+Mirabilis}) and check if there are impacts of diabetes in these strata.
+
+We see that in fact, using Breslow-Day test, diabetes influence does
+depend on bacteria type, as the p-value is smal and we reject null
+hypothesis of equals Odds Ratios (look into conclusions for more
+detailed explanation)! We can further investigate our discrepnacy with
+initial heatmap from data visualizations and the outcome of this test
+
+Therefore we used Breslow-Day Test on Homogeneity of Odds Ratios
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  We first construct three tables for each strata(type of bacteria). The
+  table is similar to the one previous test (diabetes/resistance)
+\item
+  For each strata we calculate Odds Ratio (OR)
+
+  \begin{longtable}[]{@{}lll@{}}
+  \toprule\noalign{}
+  & Resistant & Susceptible \\
+  \midrule\noalign{}
+  \endhead
+  \bottomrule\noalign{}
+  \endlastfoot
+  Diabetic & a & b \\
+  Non-Diabetic & c & d \\
+  \end{longtable}
+
+  \[
+  OR = \dfrac{a}{c}\cdot\dfrac{d}{b}
+  \]
+\end{enumerate}
+
+So if the ratio of diabetic and non diabetic having resistance is the
+same as those of susceptible, then OR should be close to 1.
+
+In order to check if the type of bacteria doesn't influence the diabetes
+factor on resistance, we should compare OR of all strata (3 types of
+bacteria)
+
+\(H_0: \quad OR_1 = OR_2 = OR_3\) , bacteria type does not affect
+diabetes factor on resistance
+
+\(H_1: \quad OR_1\ne OR_2 \ne OR_3\) , bacteria type does affect
+diabetes factor on resistance
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Then the test uses chi-squared statistic (expected/observed values) to
+  test these hypotheses. -\textgreater{} \textbf{Rejected}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{top3\_bacteria }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"escherichia coli"}\NormalTok{, }\StringTok{"enterobacteria spp."}\NormalTok{, }\StringTok{"proteus mirabilis"}\NormalTok{)}
+\NormalTok{data\_top3 }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed[dataset\_readed}\SpecialCharTok{$}\NormalTok{souche\_description }
+                            \SpecialCharTok{\%in\%}\NormalTok{ top3\_bacteria }\SpecialCharTok{\&} \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(dataset\_readed}\SpecialCharTok{$}\NormalTok{Diabetes), ]}
+
+\NormalTok{table\_3way }\OtherTok{\textless{}{-}} \FunctionTok{table}\NormalTok{(data\_top3}\SpecialCharTok{$}\NormalTok{Diabetes, data\_top3}\SpecialCharTok{$}\NormalTok{Resistance\_Status, data\_top3}\SpecialCharTok{$}\NormalTok{souche\_description)}
+\NormalTok{table\_3way\_safe }\OtherTok{\textless{}{-}} \FunctionTok{array}\NormalTok{(}\FunctionTok{as.numeric}\NormalTok{(table\_3way), }
+                         \AttributeTok{dim =} \FunctionTok{dim}\NormalTok{(table\_3way), }
+                         \AttributeTok{dimnames =} \FunctionTok{dimnames}\NormalTok{(table\_3way))}
+\CommentTok{\#Breslow{-}Day test (tests for homogeneity of odds ratios across strata)}
+\FunctionTok{BreslowDayTest}\NormalTok{(table\_3way\_safe)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Breslow-Day test on Homogeneity of Odds Ratios
+## 
+## data:  table_3way_safe
+## X-squared = 6.171, df = 2, p-value = 0.04571
+\end{verbatim}
+
+\textbf{So the effect of diabetes on resistance in fact appears and does
+depend on bacteria type.} But as we remember from our heat map we
+observed that there should not be any dependence. To be more rigorous,
+let us check odds ratios of stratas and see if they diverge from 1 and
+are different among themselves.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#calculating odds ratios}
+\NormalTok{or\_check }\OtherTok{\textless{}{-}}\NormalTok{ dataset\_readed }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(souche\_description) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}
+
+    \AttributeTok{A =} \FunctionTok{sum}\NormalTok{(Diabetes }\SpecialCharTok{==} \StringTok{"True"} \SpecialCharTok{\&}\NormalTok{ Resistance\_Status }\SpecialCharTok{==} \StringTok{"Resistant"}\NormalTok{),}
+    \AttributeTok{B =} \FunctionTok{sum}\NormalTok{(Diabetes }\SpecialCharTok{==} \StringTok{"True"} \SpecialCharTok{\&}\NormalTok{ Resistance\_Status }\SpecialCharTok{==} \StringTok{"Susceptible"}\NormalTok{),}
+    \AttributeTok{C =} \FunctionTok{sum}\NormalTok{(Diabetes }\SpecialCharTok{==} \StringTok{"No"} \SpecialCharTok{\&}\NormalTok{ Resistance\_Status }\SpecialCharTok{==} \StringTok{"Resistant"}\NormalTok{),}
+    \AttributeTok{D =} \FunctionTok{sum}\NormalTok{(Diabetes }\SpecialCharTok{==} \StringTok{"No"} \SpecialCharTok{\&}\NormalTok{ Resistance\_Status }\SpecialCharTok{==} \StringTok{"Susceptible"}\NormalTok{),}
+    
+    \CommentTok{\#adding +0.5 to avoid division by zero (Haldane correction)}
+    \AttributeTok{Odds\_Ratio =}\NormalTok{ ((A }\SpecialCharTok{+} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ (D }\SpecialCharTok{+} \FloatTok{0.5}\NormalTok{)) }\SpecialCharTok{/}\NormalTok{ ((B }\SpecialCharTok{+} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ (C }\SpecialCharTok{+} \FloatTok{0.5}\NormalTok{)),}
+    
+    \CommentTok{\#check sample size to see if heatmap was misleading}
+    \AttributeTok{Total\_Patients =} \FunctionTok{n}\NormalTok{()}
+\NormalTok{  )}
+
+\FunctionTok{print}\NormalTok{(or\_check)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 9 x 7
+##   souche_description          A     B     C     D Odds_Ratio Total_Patients
+##   <chr>                   <int> <int> <int> <int>      <dbl>          <int>
+## 1 acinetobacter baumannii     2    35    12   104      0.589            153
+## 2 citrobacter spp.           17    74    45   271      1.40             407
+## 3 enterobacteria spp.        16   143    84   578      0.787            821
+## 4 escherichia coli          667   396  2423  1572      1.09            5058
+## 5 klebsiella pneumoniae      37    72   159   314      1.02             582
+## 6 morganella morganii         2    53    11   188      0.766            254
+## 7 proteus mirabilis           7   119    59   441      0.466            626
+## 8 pseudomonas aeruginosa      2    33    16   113      0.513            164
+## 9 serratia marcescens         1    37     3   175      2.01             216
+\end{verbatim}
+
+We see that in fact there are odds ratios that are far from 1 and
+differ. So the heat map, although being a nice visual, does not
+represent a relation that is indeed present.
+
+\subsection{Conclusions}\label{conclusions}
+
+Our project was mainly aimed for discovering patterns in antibiotic
+resistance, approving theoretical knowledge from P\&S course and biology
+with practical applications of testing hypothesis. It is known that
+diabetes has an impact on immune system but we wanted to prove whether
+this impact influences antibiotic resistance. First of all, diabetes in
+itself does not directly raise resistance of infection.Though, we wanted
+to observe the indirect influence describing by such sequence of events
+
+\textbf{Diabetes} -\textgreater{} Weaker immune system -\textgreater{}
+More frequent illnesses -\textgreater{} Consistent consumption of
+antibiotics -\textgreater{} Bacteria adaptation to antibiotics
+-\textgreater{} \textbf{Produced resistance}
+
+In order to test it we needed to have an equal distributions of
+resistant and susceptible age groups so that if observed we can conclude
+that dependence is not biased (as the elderly people have more frequent
+diabetes occurence). Indeed, the distributions was equal.
+
+Hence, we discovered, using test for independence, that diabetes does
+not raise resistance on the whole data. But then, splitting the data
+groups into top 3 infections, the impact occurred.
+
+Revising the work done so far, we inferred insightful knowledge about
+outcomes of our results: Simpsons' paradox. That is a phenomenon in
+probability and statistics where a trend or relationship that appears in
+several different groups of data disappears or even reverses when the
+groups are combined. In our specific example, the paradox means that
+while our overall test on all bacteria groups showed no dependence
+between diabetes and bacterial resistance, the relationship emerged when
+we analyzed the top 3 groups of bacteria separately.
+
+To sum up, in this mini-research project we have worked with practical
+dataset from clinical research. We have examined key metrics (age) and
+risk factors (diabetes). We have successfully checked resistance
+patterns. Precisely, there is no pattern regarding age of patients,
+however, there is a great pattern in having diabetes and specific type
+of infection that through all data asserts resistance to that infection.
+In future, to continue our research, possible consequent areas for
+improvement could be building a logistic regression on classifying
+bacterial infection (resistant/susceptible), examining dependence of
+resistance to specific geographical area (South, East, West, North).
+
+\end{document}
